@@ -1,6 +1,26 @@
 # the-penguins-club DNS
 
-this project manages DNS records for the Penguins Club by IaC.
+This project manages DNS records for the Penguins Club by IaC.
+
+## Set up
+
+**Dependencies**: `terraform` @ version defined in `terraform.meta.tf`
+
+1. copy `.envrc.sample` to `.envrc` and set your Porkbun API keys in there.
+1. install and enable `direnv`, or manually source the env with `source .envrc`.
+1. `terraform init`
+1. `terraform plan`
+1. `terraform apply`
+
+## Developing
+
+**Dependencies**: `prek` or `pre-commit`, `terraform`, `terraform-docs`
+
+1. Setup pre-commit hooks with `prek install` or `pre-commit install`.
+1. Make changes.
+1. Send PR.
+
+Please follow [Conventional Commits v1][c1] for commit message formatting.
 
 ## Reference
 
@@ -37,3 +57,5 @@ No resources.
 
 No outputs.
 <!-- END_TF_DOCS -->
+
+[c1]: https://www.conventionalcommits.org/en/v1.0.0/#summary
