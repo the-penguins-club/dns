@@ -1,0 +1,30 @@
+repos:
+  - repo: https://github.com/pre-commit/sync-pre-commit-deps
+    rev: v0.0.5
+    hooks:
+      - id: sync-pre-commit-deps
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.10.0  # Use the latest version or a specific version
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.109.2
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+      - id: terraform_docs
+        args:
+          - --args=--config=.terraform-docs.yml
