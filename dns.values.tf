@@ -8,6 +8,20 @@ locals {
     ]
   }
 
+  # some utility values
+  base_A = [
+    "185.199.108.153",
+    "185.199.109.153",
+    "185.199.110.153",
+    "185.199.111.153"
+  ]
+  base_AAAA = [
+    "2606:50c0:8000::153",
+    "2606:50c0:8001::153",
+    "2606:50c0:8002::153",
+    "2606:50c0:8003::153"
+  ]
+
   /*
   # this map defines multiple records in bulk
   dns_records: {
@@ -26,8 +40,8 @@ locals {
   */
   dns_records = {
     (var.base_domain) = [
-      { type = "A", content = ["185.199.108.153", "185.199.109.153", "185.199.110.153", "185.199.111.153"] },
-      { type = "AAAA", content = ["2606:50c0:8000::153", "2606:50c0:8001::153", "2606:50c0:8002::153", "2606:50c0:8003::153"] },
+      { type = "A", content = local.base_A },
+      { type = "AAAA", content = local.base_AAAA },
       { sub = "www", type = "CNAME", content = "the-penguins-club.github.io" },
       { sub = "wiki", type = "CNAME", content = "the-penguins-club.github.io" },
     ]
