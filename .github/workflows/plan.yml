@@ -1,0 +1,31 @@
+name: Plan
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - "**.tf"
+      - "**.tfvars"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    env:
+      TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+      TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN }}
+      PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
+      PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: get terraform version
+        run: cat .terraform-version
+        id: terraform-version
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ steps.terraform-version.outputs.stdout }}
+      - name: terraform init
+        run: terraform init -input=false
+      - name: terraform plan
+        run: terraform plan -input=false -no-color
