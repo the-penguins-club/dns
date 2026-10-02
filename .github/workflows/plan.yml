@@ -13,7 +13,7 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || (github.event.issue.pull_request && github.event.comment.body == '/plan')
+    if: github.event_name == 'pull_request' || (github.event.issue.pull_request && contains(github.event.comment.body, '/plan'))
     env:
       TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
