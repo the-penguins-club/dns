@@ -19,6 +19,7 @@ locals {
         ttl      = 300         # optional; TTL in seconds
         priority = 10          # optional; record priority
         note     = "..."       # optional; additional information
+        key      = "..."       # optional; string to diff same domain+type records
       },
       ...
     ],
@@ -29,7 +30,9 @@ locals {
     (var.base_domain) = [
       { type = "A", content = "2.3.4.5" },
       { type = "AAAA", content = "cafe::::babe" },
-      { sub = "subdomain", type = "AAAA", content = "cafe::::babe" }
+      { sub = "subdomain", type = "AAAA", content = "cafe::::babe" },
+      { type = "TXT", content = "v=spf1 mx ~all", key = "spf" },
+      { type = "TXT", content = "openpgp4fpr:<keyid>", key = "openpgp" }
     ]
   }
 }

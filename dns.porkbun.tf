@@ -1,12 +1,12 @@
 locals {
   # converts the bulk_records map into a flattened map
-  # keyed by subdomain.base_domain:record_type
+  # keyed by subdomain.base_domain:record_type.key
   resolved_bulk_records = merge([
     for domain, record in local.bulk_records : {
       for entry in record :
       join(":", [
         try(entry.sub, "") != "" ? "${entry.sub}.${domain}" : domain,
-        entry.type
+        try(entry.key, "") != "" ? "${entry.type}.${entry.key}" : entry.type
         ]) => merge(entry, {
         domain    = domain
         subdomain = try(entry.sub, null)
