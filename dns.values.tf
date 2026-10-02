@@ -15,7 +15,7 @@ locals {
       {
         sub      = "subdomain" # optional; omit for the base domain
         type     = "record type"
-        content  = "DNS record content"
+        content  = "DNS record content" | [ "DNS record content 1", ... ]
         ttl      = 300         # optional; TTL in seconds
         priority = 10          # optional; record priority
         notes    = "..."       # optional; additional information
@@ -28,10 +28,10 @@ locals {
   */
   bulk_records = {
     (var.base_domain) = [
-      { type = "A", content = "2.3.4.5" },
+      { type = "A", content = ["2.3.4.5", "5.6.7.8"] },
       { type = "AAAA", content = "cafe::::babe" },
       { sub = "subdomain", type = "AAAA", content = "cafe::::babe" },
-      { type = "TXT", content = "v=spf1 mx ~all", key = "spf" },
+      { type = "TXT", content = ["v=spf1 mx ~all", "v=spf1 include:_spf.example.com ~all"] },
       { type = "TXT", content = "openpgp4fpr:<keyid>", key = "openpgp" }
     ]
   }
