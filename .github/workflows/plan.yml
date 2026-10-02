@@ -7,6 +7,8 @@ on:
     paths:
       - "**.tf"
       - "**.tfvars"
+      - "**.terraform.lock.hcl"
+      - ".github/workflows/plan.yml"
   issue_comment:
     types: [created]
 
