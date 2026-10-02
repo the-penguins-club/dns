@@ -30,4 +30,25 @@ locals {
       { type = "AAAA", content = ["2606:50c0:8000::153", "2606:50c0:8001::153", "2606:50c0:8002::153", "2606:50c0:8003::153"] },
     ]
   }
+
+  /*
+  # this map defines forward records in bulk
+  forward_records: {
+    base_domain = [
+      {
+        sub           = "subdomain"  # optional; omit for the base domain
+        location      = "target url"
+        include_path  = false        # optional; include the path in the forward
+        wildcard      = false        # optional; apply the forward to all subdomains
+        type          = "temporary"  # optional; redirect type
+        redirect_type = null         # optional; HTTP redirect type, overrides type if set
+      }, ...
+    ], ...
+  }
+  */
+  forward_records = {
+    (var.base_domain) = [
+      { sub = "join", location = "https://t.me/+tzEXa1NQRv41MmU1" },
+    ]
+  }
 }

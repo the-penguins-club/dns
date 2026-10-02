@@ -54,6 +54,7 @@ No modules.
 | ---- | ---- |
 | [porkbun_dns_record.dns](https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs/resources/dns_record) | resource |
 | [porkbun_domain_nameservers.ns](https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs/resources/domain_nameservers) | resource |
+| [porkbun_url_forward.fwd](https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs/resources/url_forward) | resource |
 
 ### Inputs
 
