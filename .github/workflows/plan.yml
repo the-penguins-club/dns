@@ -53,7 +53,7 @@ jobs:
       - name: terraform init
         run: terraform init -input=false
       - name: terraform plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false
       - name: report plan status
         if: ${{ !cancelled() && github.event_name == 'issue_comment' }}
         run: |
