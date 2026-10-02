@@ -1,8 +1,6 @@
 name: Lint
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
@@ -15,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: get terraform version
+        run: cat .terraform-version
+        id: terraform-version
       - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ steps.terraform-version.outputs.stdout }}
       - uses: actions/setup-python@v7
       - uses: pre-commit/action@v3.0.1
