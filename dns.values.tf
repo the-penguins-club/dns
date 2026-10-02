@@ -32,7 +32,7 @@ locals {
   EOT
 
   /*
-  # this map defines multiple records in bulk
+  # this map defines dns records in bulk
   dns_records: {
     base_domain = [
       {
