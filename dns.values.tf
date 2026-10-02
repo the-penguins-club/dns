@@ -18,7 +18,7 @@ locals {
         content  = "DNS record content"
         ttl      = 300         # optional; TTL in seconds
         priority = 10          # optional; record priority
-        note     = "..."       # optional; additional information
+        notes    = "..."       # optional; additional information
         key      = "..."       # optional; string to diff same domain+type records
       },
       ...

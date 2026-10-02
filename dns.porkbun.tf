@@ -26,8 +26,8 @@ resource "porkbun_dns_record" "bulk" {
   domain    = each.value.domain
   type      = each.value.type
   content   = each.value.content
-  subdomain = try(each.value.sub, null)
+  subdomain = try(each.value.subdomain, null)
   ttl       = try(each.value.ttl, null)
   priority  = try(each.value.priority, null)
-  notes     = try(each.value.note, null)
+  notes     = try(each.value.notes, null)
 }
