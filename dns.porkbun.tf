@@ -16,10 +16,8 @@ locals {
             type      = rec.type
             content   = content
         })
-      }
-    ]
+    }]
   ])...)
-
 }
 
 resource "porkbun_domain_nameservers" "ns" {
@@ -31,10 +29,10 @@ resource "porkbun_domain_nameservers" "ns" {
 resource "porkbun_dns_record" "bulk" {
   for_each  = local.resolved_bulk_records
   domain    = each.value.domain
+  subdomain = try(each.value.subdomain, null)
   type      = each.value.type
   content   = each.value.content
-  subdomain = try(each.value.subdomain, null)
-  ttl       = try(each.value.ttl, null)
   priority  = try(each.value.priority, null)
+  ttl       = try(each.value.ttl, null)
   notes     = try(each.value.notes, null)
 }
