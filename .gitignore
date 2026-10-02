@@ -1,3 +1,7 @@
+# ignore env files
+.env
+.envrc
+
 # Local .terraform directories
 .terraform/
 
