@@ -8,6 +8,8 @@ terraform {
     }
   }
 
+  # hydrated by TF_CLOUD_ORGANIZATION/TF_WORKSPACE env vars
+  cloud {}
 }
 
 # hydrated by PORKBUN_API_KEY/PORKBUN_SECRET_KEY env vars
