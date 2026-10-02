@@ -27,11 +27,6 @@ jobs:
         github.event.issue.state == 'open' &&
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     env:
-      TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
-      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
-      TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN }}
-      PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
-      PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -58,10 +53,16 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ steps.terraform-version.outputs.stdout }}
-      - name: terraform init
-        run: terraform init -input=false
       - name: terraform plan
-        run: terraform plan -input=false
+        env:
+          TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN }}
+          PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
+          PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
+        run: |
+          terraform init -input=false
+          terraform plan -input=false
       - name: report plan status
         if: ${{ !cancelled() && github.event_name == 'issue_comment' }}
         run: |
