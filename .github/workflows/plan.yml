@@ -26,29 +26,31 @@ jobs:
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     env:
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
       GH_TOKEN: ${{ github.token }}
       CHECK_NAME: plan
     steps:
       - name: ack /plan comment
         if: github.event_name == 'issue_comment'
         run: >- #shell
-          gh api  -f content=eyes
+          gh api -f content=eyes
           "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions"
 
       - name: get PR commit SHA
         if: github.event_name == 'issue_comment'
         id: pr
-        run: | #shell
-          sha=$(gh pr view "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --json headRefOid -q .headRefOid)
+        run: >- #shell
+          sha=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}"
+            --json headRefOid -q .headRefOid);
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
       - name: create check run
         if: github.event_name == 'issue_comment'
         id: check
-        run: | #shell
-          check_id=$(gh api "repos/${{ github.repository }}/check-runs" \
-            -f name="$CHECK_NAME" -f head_sha="${{ steps.pr.outputs.sha }}" \
-            -f status=in_progress -f details_url="$RUN_URL" --jq .id)
+        run: >- #shell
+          check_id=$(gh api "repos/${{ github.repository }}/check-runs"
+            -f name="$CHECK_NAME" -f head_sha="${{ steps.pr.outputs.sha }}"
+            -f status=in_progress -f details_url="$RUN_URL" --jq .id);
           echo "check_id=$check_id" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@v7
