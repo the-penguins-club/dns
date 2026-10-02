@@ -41,6 +41,9 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ steps.pr.outputs.sha }}" \
             -f state=pending -f context="plan (comment)" -f target_url="$RUN_URL"
+      - name: react to trigger comment
+        if: github.event_name == 'issue_comment'
+        run: gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=eyes
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event_name == 'issue_comment' && steps.pr.outputs.sha || '' }}
@@ -53,7 +56,7 @@ jobs:
       - name: terraform init
         run: terraform init -input=false
       - name: terraform plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false
       - name: report plan status
         if: ${{ !cancelled() && github.event_name == 'issue_comment' }}
         run: |
