@@ -52,7 +52,7 @@ No modules.
 
 | Name | Type |
 | ---- | ---- |
-| [porkbun_dns_record.bulk](https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs/resources/dns_record) | resource |
+| [porkbun_dns_record.dns](https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs/resources/dns_record) | resource |
 | [porkbun_domain_nameservers.ns](https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs/resources/domain_nameservers) | resource |
 
 ### Inputs

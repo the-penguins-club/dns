@@ -1,8 +1,8 @@
 locals {
-  # converts the bulk_records map into a flattened map
+  # converts the dns_records map into a flattened map
   # keyed by subdomain.base_domain:record_type.key.index
-  resolved_bulk_records = merge(flatten([
-    for domain_name, records in local.bulk_records : [
+  resolved_dns_records = merge(flatten([
+    for domain_name, records in local.dns_records : [
       for rec in records : {
         for idx, content in can(distinct(rec.content)) ? flatten(rec.content) : flatten([rec.content]) :
         format(
@@ -26,8 +26,8 @@ resource "porkbun_domain_nameservers" "ns" {
   nameservers = each.value
 }
 
-resource "porkbun_dns_record" "bulk" {
-  for_each  = local.resolved_bulk_records
+resource "porkbun_dns_record" "dns" {
+  for_each  = local.resolved_dns_records
   domain    = each.value.domain
   subdomain = try(each.value.subdomain, null)
   type      = each.value.type
