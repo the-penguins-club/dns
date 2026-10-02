@@ -19,6 +19,7 @@ permissions:
 
 jobs:
   plan:
+    name: plan
     runs-on: ubuntu-latest
     if: >-
       github.event_name == 'pull_request' || (github.event.issue.pull_request &&
@@ -64,6 +65,7 @@ jobs:
         with:
           terraform_version: ${{ steps.terraform-version.outputs.stdout }}
       - name: terraform plan
+        id: terraform-plan
         env:
           TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
           TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
