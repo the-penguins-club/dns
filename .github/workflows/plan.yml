@@ -7,59 +7,89 @@ on:
     paths:
       - "**.tf"
       - "**.tfvars"
+      - "**.terraform.lock.hcl"
+      - ".github/workflows/plan.yml"
   issue_comment:
     types: [created]
 
 permissions:
   contents: read
   pull-requests: write
-  statuses: write
+  checks: write
 
 jobs:
   plan:
+    name: plan
     runs-on: ubuntu-latest
     if: >-
-      github.event_name == 'pull_request' ||
-      (github.event.issue.pull_request && github.event.comment.body == '/plan')
+      github.event_name == 'pull_request' || (github.event.issue.pull_request &&
+        github.event.comment.body == '/plan' && github.event.issue.state == 'open' &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     env:
-      TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
-      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
-      TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN }}
-      PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
-      PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
       GH_TOKEN: ${{ github.token }}
+      CHECK_NAME: plan
     steps:
+      - name: ack /plan comment
+        if: github.event_name == 'issue_comment'
+        run: >- #shell
+          gh api -f content=eyes
+          "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions"
+
       - name: get PR commit SHA
         if: github.event_name == 'issue_comment'
         id: pr
-        run: |
-          sha=$(gh pr view "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --json headRefOid -q .headRefOid)
+        run: >- #shell
+          sha=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}"
+            --json headRefOid -q .headRefOid);
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
-      - name: mark plan pending
+
+      - name: create check run
         if: github.event_name == 'issue_comment'
-        run: |
-          gh api "repos/${{ github.repository }}/statuses/${{ steps.pr.outputs.sha }}" \
-            -f state=pending -f context="plan (comment)" -f target_url="$RUN_URL"
-      - name: react to trigger comment
-        if: github.event_name == 'issue_comment'
-        run: gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=eyes
+        id: check
+        run: >- #shell
+          check_id=$(gh api "repos/${{ github.repository }}/check-runs"
+            -f name="$CHECK_NAME" -f head_sha="${{ steps.pr.outputs.sha }}"
+            -f status=in_progress -f details_url="$RUN_URL" --jq .id);
+          echo "check_id=$check_id" >> "$GITHUB_OUTPUT"
+
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event_name == 'issue_comment' && steps.pr.outputs.sha || '' }}
+
       - name: get terraform version
         run: cat .terraform-version
         id: terraform-version
       - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ steps.terraform-version.outputs.stdout }}
-      - name: terraform init
-        run: terraform init -input=false
       - name: terraform plan
-        run: terraform plan -input=false
-      - name: report plan status
-        if: ${{ !cancelled() && github.event_name == 'issue_comment' }}
-        run: |
-          gh api "repos/${{ github.repository }}/statuses/${{ steps.pr.outputs.sha }}" \
-            -f state=${{ job.status == 'success' && 'success' || 'failure' }} \
-            -f context="plan (comment)" -f target_url="$RUN_URL"
+        id: terraform-plan
+        env:
+          TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN }}
+          PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
+          PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
+        run: | #shell
+          terraform init -input=false
+          terraform plan -input=false -out=.tfplan
+
+      - name: show plan
+        if: >-
+          steps.terraform-plan.outcome == 'success' && (github.event_name == 'issue_comment' ||
+            github.event.pull_request.head.repo.full_name == github.repository)
+        uses: borchero/terraform-plan-comment@v3
+        with:
+          token: ${{ github.token }}
+          pr_number: ${{ env.PR_NUMBER }}
+          planfile: .tfplan
+          skip_empty: true
+
+      - name: complete check run
+        if: ${{ !cancelled() && steps.check.outputs.check_id != '' }}
+        shell: bash
+        run: >- #shell
+          gh api -X PATCH "repos/${{ github.repository }}/check-runs/${{ steps.check.outputs.check_id }}"
+            -f status=completed -f conclusion="${{ steps.terraform-plan.outcome }}"

@@ -13,9 +13,12 @@ this project manages DNS records for the Penguins Club by IaC.
 
 please follow [Conventional Commits v1][c1] for commit message formatting.
 
+a `terraform plan` is required before merging PRs. changes to terraform files
+trigger a plan. Otherwise comment `/plan` on the PR thread to force a run.
+
 ## Administration
 
-This is only needed if you want to apply the plan yourself.
+This is only needed if you want to apply the plan by yourself.
 
 **dependencies**: `terraform` @ version defined in `terraform.meta.tf`
 
