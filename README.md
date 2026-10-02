@@ -19,7 +19,7 @@ This is only needed if you want to apply the plan yourself.
 
 **dependencies**: `terraform` @ version defined in `terraform.meta.tf`
 
-1. copy `.envrc.sample` to `.envrc` and set your Porkbun API keys in there.
+1. copy `.envrc.sample` to `.envrc` and set Porkbun and HCP Terraform API keys.
 1. install and enable `direnv`, or manually source the env with `source .envrc`.
 1. `terraform init`
 1. `terraform plan`
