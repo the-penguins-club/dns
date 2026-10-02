@@ -22,7 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       github.event_name == 'pull_request' ||
-      (github.event.issue.pull_request && github.event.comment.body == '/plan')
+      (github.event.issue.pull_request &&
+        github.event.comment.body == '/plan' &&
+        github.event.issue.state == 'open' &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     env:
       TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
       TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
