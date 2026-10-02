@@ -54,8 +54,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| porkbun\_api\_key | porkbun API key. | `string` | n/a | yes |
-| porkbun\_api\_secret\_key | porkbun API secret key. | `string` | n/a | yes |
 | base\_domain | base domain used in dns record definitions. | `string` | `"thepenguins.club"` | no |
 
 ### Outputs

@@ -7,9 +7,8 @@ terraform {
       version = "~> 0.3.0"
     }
   }
+
 }
 
-provider "porkbun" {
-  api_key    = var.porkbun_api_key
-  secret_key = var.porkbun_api_secret_key
-}
+# hydrated by PORKBUN_API_KEY/PORKBUN_SECRET_KEY env vars
+provider "porkbun" {}
