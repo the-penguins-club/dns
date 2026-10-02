@@ -25,8 +25,8 @@ locals {
     for domain_name, records in local.forward_records : [
       for rec in records : {
         (rec.sub != "" ? "${rec.sub}.${domain_name}" : domain_name) = merge(rec, {
-          domain = domain_name
-          sub    = rec.sub
+          domain    = domain_name
+          subdomain = rec.sub
         })
     }]
   ])...)
