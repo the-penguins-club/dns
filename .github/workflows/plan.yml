@@ -22,6 +22,8 @@ jobs:
       PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'issue_comment' && format('refs/pull/{0}', github.event.issue.number) || '' }}
       - name: get terraform version
         run: cat .terraform-version
         id: terraform-version
