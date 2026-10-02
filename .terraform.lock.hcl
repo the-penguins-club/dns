@@ -5,6 +5,7 @@ provider "registry.terraform.io/jianyuan/porkbun" {
   version     = "0.3.3"
   constraints = "~> 0.3.0"
   hashes = [
+    "h1:Fpwu6J+L3/ipehCQHg/WKd5sZb+eloEVTItlr1Qxf+w=",
     "h1:JuJ3Q6wE5URWhmykl21rQIaiR/uDo/8etJZ62zSqIaw=",
     "zh:000907a17a31d6cfe31255dbc6e179793959b34272431e4639dfc9c9394dd5f3",
     "zh:02cf6fedd0d7ac6e29f6903ee1ead4d95a57d58e7b400081e1a9fb72c4c62129",
