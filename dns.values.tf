@@ -55,9 +55,10 @@ locals {
       { sub = "wiki", type = "CNAME", content = "the-penguins-club.github.io" },
       { type = "MX", content = "bdeshi.space", priority = 10 },
       { type = "TXT", content = "v=spf1 mx ~all", key = "spf" },
-      { type = "TXT", content = ["anthropic-domain-verification-j540bn=IZ5fSvFWZn05shtTQxcgX5Hrw"], key = "verify" },
       { sub = "default._domainkey", type = "TXT", content = replace(local.base_dkim, "\n", "") },
       { sub = "_dmarc", type = "TXT", content = "v=DMARC1; p=none; rua=mailto:admin@${var.base_domain}" }
+      { type = "TXT", content = ["anthropic-domain-verification-j540bn=IZ5fSvFWZn05shtTQxcgX5Hrw"], key = "verify" },
+      { sub = "_gh-the-penguins-club-o", type = "txt", content = "a80bc30083", notes = "github org verification record" }
     ]
   }
 
