@@ -58,7 +58,8 @@ locals {
       { sub = "default._domainkey", type = "TXT", content = replace(local.base_dkim, "\n", "") },
       { sub = "_dmarc", type = "TXT", content = "v=DMARC1; p=none; rua=mailto:admin@${var.base_domain}" },
       { type = "TXT", content = ["anthropic-domain-verification-j540bn=IZ5fSvFWZn05shtTQxcgX5Hrw"], key = "verify" },
-      { sub = "_gh-the-penguins-club-o", type = "TXT", content = "a80bc30083", notes = "github org verification record" }
+      { sub = "_gh-the-penguins-club-o", type = "TXT", content = "a80bc30083", notes = "github org verification record" },
+      { sub = "_github-pages-challenge-the-penguins-club", type = "TXT", content = "f478d45272552d180fc5b1ab98cf2f", notes = "github pages verification record" }
     ]
   }
 
