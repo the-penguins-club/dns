@@ -53,6 +53,7 @@ locals {
       { type = "AAAA", content = local.base_AAAA },
       { sub = "www", type = "CNAME", content = "the-penguins-club.github.io" },
       { sub = "wiki", type = "CNAME", content = "the-penguins-club.github.io" },
+      { sub = "ntqt", type = "CNAME", content = "the-penguins-club.github.io" },
       { type = "MX", content = "bdeshi.space", priority = 10 },
       { type = "TXT", content = "v=spf1 mx ~all", key = "spf" },
       { sub = "default._domainkey", type = "TXT", content = replace(local.base_dkim, "\n", "") },
