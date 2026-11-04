@@ -52,6 +52,7 @@ locals {
       { type = "A", content = local.base_A },
       { type = "AAAA", content = local.base_AAAA },
       { sub = "hartal", type = "CNAME", content = "the-penguins-club.github.io" },
+      { sub = "memorial", type = "CNAME", content = "the-penguins-club.github.io" },
       { sub = "ntqt", type = "CNAME", content = "the-penguins-club.github.io" },
       { sub = "wiki", type = "CNAME", content = "the-penguins-club.github.io" },
       { sub = "www", type = "CNAME", content = "the-penguins-club.github.io" },
