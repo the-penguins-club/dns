@@ -22,6 +22,8 @@ locals {
     "2606:50c0:8003::153"
   ]
 
+  github_pages_target = "the-penguins-club.github.io"
+
   base_dkim = <<-EOT
     v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAryRI6+1rfPT9sN/G
     s5CrCte7wlW77KDmPiveikSW3KxdPW6UUbY13sJvMtRGO0MFXVqyvbMMPYrpBIInii0aVpx2Nz/iSC
@@ -51,10 +53,11 @@ locals {
     (var.base_domain) = [
       { type = "A", content = local.base_A },
       { type = "AAAA", content = local.base_AAAA },
-      { sub = "hartal", type = "CNAME", content = "the-penguins-club.github.io" },
-      { sub = "ntqt", type = "CNAME", content = "the-penguins-club.github.io" },
-      { sub = "wiki", type = "CNAME", content = "the-penguins-club.github.io" },
-      { sub = "www", type = "CNAME", content = "the-penguins-club.github.io" },
+      { sub = "hartal", type = "CNAME", content = local.github_pages_target },
+      { sub = "memorial", type = "CNAME", content = local.github_pages_target },
+      { sub = "ntqt", type = "CNAME", content = local.github_pages_target },
+      { sub = "wiki", type = "CNAME", content = local.github_pages_target },
+      { sub = "www", type = "CNAME", content = local.github_pages_target },
       { type = "MX", content = "bdeshi.space", priority = 10 },
       { type = "TXT", content = "v=spf1 mx ~all", key = "spf" },
       { sub = "default._domainkey", type = "TXT", content = replace(local.base_dkim, "\n", "") },
